@@ -1,0 +1,29 @@
+{
+  "name": "smart-campus-lost-found",
+  "version": "1.0.0",
+  "description": "AI-Powered Smart Campus Lost & Found System using Google Gemini 2.5 Flash Multimodal Matching",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev": "npm run dev:backend & npm run dev:frontend",
+    "build:backend": "npm run build --prefix backend",
+    "build:frontend": "npm run build --prefix frontend",
+    "build": "npm run build:backend && npm run build:frontend",
+    "db:init": "psql $DATABASE_URL -f database/schema.sql",
+    "db:seed": "psql $DATABASE_URL -f database/seed.sql"
+  },
+  "keywords": [
+    "lost-and-found",
+    "gemini",
+    "ai",
+    "multimodal",
+    "react",
+    "express",
+    "postgresql",
+    "genai"
+  ],
+  "author": "Antigravity Engineering",
+  "license": "ISC"
+}
