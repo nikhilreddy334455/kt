@@ -4,14 +4,30 @@ import { ItemInput, ItemRecord, ItemMatchRecord, ItemQueryParams } from '../sche
 
 dotenv.config();
 
-const connectionString =
+let connectionString =
   process.env.DATABASE_URL || 'postgresql://localhost:5432/campus_lost_found';
+
+// Check for common configuration mistake where user pastes Supabase dashboard URL instead of postgresql://
+if (connectionString.startsWith('https://') || connectionString.startsWith('http://')) {
+  console.error(
+    'CRITICAL CONFIG ERROR: DATABASE_URL starts with http/https. A PostgreSQL connection string is required (e.g. postgresql://postgres:[password]@db.[ref].supabase.co:5432/postgres). Please retrieve the URI from Supabase Project Settings -> Database.'
+  );
+}
+
+const isRemoteDb = Boolean(
+  connectionString.includes('supabase.co') ||
+  connectionString.includes('neon.tech') ||
+  connectionString.includes('render.com') ||
+  connectionString.includes('pooler.supabase.com') ||
+  process.env.NODE_ENV === 'production'
+);
 
 export const pool = new Pool({
   connectionString,
-  max: 20,
+  max: 10,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000,
+  connectionTimeoutMillis: 10000,
+  ssl: isRemoteDb ? { rejectUnauthorized: false } : undefined,
 });
 
 pool.on('error', (err) => {

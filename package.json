@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "AI-Powered Smart Campus Lost & Found System using Google Gemini 2.5 Flash Multimodal Matching",
   "private": true,
+  "type": "module",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
-    "install:all": "npm install --prefix backend && npm install --prefix frontend",
     "dev:backend": "npm run dev --prefix backend",
     "dev:frontend": "npm run dev --prefix frontend",
     "dev": "npm run dev:backend & npm run dev:frontend",
@@ -14,6 +18,21 @@
     "db:init": "psql $DATABASE_URL -f database/schema.sql",
     "db:seed": "psql $DATABASE_URL -f database/seed.sql"
   },
+  "dependencies": {
+    "@google/genai": "^2.24.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.3",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.17.24",
+    "@types/pg": "^8.11.11",
+    "typescript": "^5.7.3"
+  },
   "keywords": [
     "lost-and-found",
     "gemini",
@@ -22,7 +41,8 @@
     "react",
     "express",
     "postgresql",
-    "genai"
+    "genai",
+    "vercel"
   ],
   "author": "Antigravity Engineering",
   "license": "ISC"

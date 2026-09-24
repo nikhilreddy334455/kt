@@ -145,15 +145,33 @@ npm run dev
 
 ---
 
-## 🤖 AI Matching Details
+## ⚡ Deploying to Vercel
 
-When comparing candidates, Gemini 2.5 Flash enforces:
-1. **Multimodal Analysis:** Analyzes visual photos for wear marks, specific stickers, color tone, and physical identifiers.
-2. **Timeline Consistency:** Validates that an item was not found before it was lost.
-3. **Structured Response Schema:** Enforces standard JSON output:
-```json
-{
-  "confidence_score": 94,
-  "explanation": "Both items are 32oz blue Hydro Flasks with silver caps, identical Yosemite national park vinyl stickers, and a specific dent on the bottom rim. Locations (Library 2nd floor and adjacent Quad benches) and timeline are directly consistent."
-}
+This repository is pre-configured with `vercel.json` for one-click deployment of both the React frontend and Express serverless API.
+
+### 1. Push to GitHub
+Ensure all code is committed and pushed to your GitHub repository:
+```bash
+git push origin main
 ```
+
+### 2. Set Up Cloud PostgreSQL (e.g. Supabase or Neon)
+If using Supabase:
+1. Open your project on [Supabase](https://supabase.com/).
+2. Go to **SQL Editor** -> **New Query**, paste the contents of [`database/schema.sql`](file:///Users/kuchireddynikhilreddy/untitled%20folder%20ki/database/schema.sql) and run it.
+3. (Optional) Run [`database/seed.sql`](file:///Users/kuchireddynikhilreddy/untitled%20folder%20ki/database/seed.sql) to populate sample campus records.
+4. Go to **Project Settings** -> **Database** -> **Connection string** -> select **URI**.
+   > ⚠️ **Important:** Do NOT use the `https://...` API URL. Copy the PostgreSQL connection URI format:
+   > `postgresql://postgres.[project-ref]:[YOUR-PASSWORD]@aws-0-[region].pooler.supabase.com:6543/postgres`
+
+### 3. Deploy in Vercel
+1. Go to [Vercel Dashboard](https://vercel.com/new).
+2. Click **Import Repository** and select `nikhilreddy334455/kt`.
+3. In **Environment Variables**, add:
+   * `DATABASE_URL`: Your cloud PostgreSQL connection string (`postgresql://...`)
+   * `GEMINI_API_KEY`: Your Google Gemini API Key
+   * `NODE_ENV`: `production`
+4. Click **Deploy**.
+
+Vercel will automatically build the frontend into `frontend/dist` and route all `/api/*` and `/health` requests to the serverless Express backend function in `api/index.ts`.
+

@@ -91,23 +91,25 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-// Start listening
-const server = app.listen(PORT, () => {
-  console.log(`=================================================`);
-  console.log(`🚀 Smart Campus Lost & Found API running`);
-  console.log(`📡 URL: http://localhost:${PORT}`);
-  console.log(`⚡ Mode: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🤖 Gemini Model: gemini-2.5-flash`);
-  console.log(`=================================================`);
-});
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
-  server.close(() => {
-    console.log('HTTP server closed');
-    pool.end();
+// Start listening when not in a serverless environment (e.g. Vercel)
+if (!process.env.VERCEL) {
+  const server = app.listen(PORT, () => {
+    console.log(`=================================================`);
+    console.log(`🚀 Smart Campus Lost & Found API running`);
+    console.log(`📡 URL: http://localhost:${PORT}`);
+    console.log(`⚡ Mode: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🤖 Gemini Model: gemini-2.5-flash`);
+    console.log(`=================================================`);
   });
-});
+
+  // Graceful shutdown
+  process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received: closing HTTP server');
+    server.close(() => {
+      console.log('HTTP server closed');
+      pool.end();
+    });
+  });
+}
 
 export default app;
