@@ -45,7 +45,7 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
 });
 
 // 4. Healthcheck and status route
-app.get('/health', async (_req: Request, res: Response) => {
+app.get(['/health', '/api/health'], async (_req: Request, res: Response) => {
   try {
     const dbTest = await pool.query('SELECT 1 AS healthy;');
     const isDbConnected = dbTest.rows[0]?.healthy === 1;
@@ -65,8 +65,9 @@ app.get('/health', async (_req: Request, res: Response) => {
   }
 });
 
-// 5. Mount API routes
+// 5. Mount API routes (supports both /api/items and /items if URL is stripped by Vercel rewrite)
 app.use('/api', itemsRouter);
+app.use(itemsRouter);
 
 // 6. 404 handler for unmatched routes
 app.use((req: Request, res: Response) => {

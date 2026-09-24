@@ -16,10 +16,11 @@ backend/node_modules/
 frontend/node_modules/
 
 # Build artifacts
-dist/
+/dist/
 dist-ssr/
-backend/dist/
 frontend/dist/
+!backend/dist
+!backend/dist/**
 *.local
 
 # Logs
